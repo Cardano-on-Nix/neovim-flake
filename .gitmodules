@@ -1,0 +1,3 @@
+[submodule "neovim-flake"]
+	path = neovim-flake
+	url = https://github.com/disassembler/neovim-flake.git
