@@ -6,13 +6,11 @@ with lib;
 with builtins;
 
 let
-  inherit (prev.vimUtils) buildVimPluginFrom2Nix;
+  inherit (prev.vimUtils) buildVimPlugin;
 
   ts = prev.tree-sitter.override {
     extraGrammars = {
       tree-sitter-scala = final.tree-sitter-scala-master;
-      tree-sitter-tsx = final.tree-sitter-tsx-master;
-      tree-sitter-typescript = final.tree-sitter-tsx-master;
     };
   };
 
@@ -46,35 +44,21 @@ let
     EOL
   '';
 
-  # without adding `list.smithy`, highlights are ignored
-  smithyParserHook = ''
-    substituteInPlace $out/lua/nvim-treesitter/parsers.lua \
-      --replace 'list.agda = {' '
-        list.smithy = {
-          install_info = {
-            url = "https://github.com/indoorvivants/tree-sitter-smithy",
-            branch = "main",
-            files = { "src/parser.c" },
-            generate_requires_npm = true,
-          },
-          filetype = "smithy",
-          maintainers = { "@gvolpe" },
-        }
-
-        list.agda = {
-      '
-  '';
-
   # sync queries of tree-sitter-scala and nvim-treesitter
   queriesHook = ''
     cp ${inputs.tree-sitter-scala}/queries/scala/* $out/queries/scala/
     cp ${ts.builtGrammars.tree-sitter-smithy}/queries/highlights.scm $out/queries/smithy/highlights.scm
   '';
 
+  telescopeFixupHook = ''
+    substituteInPlace $out/scripts/vimg \
+      --replace "ueberzug layer" "${pkgs.ueberzug}/bin/ueberzug layer"
+    substituteInPlace $out/lua/telescope/_extensions/media_files.lua \
+      --replace "M.base_directory .. '/scripts/vimg'" "'$out/scripts/vimg'"
+  '';
+
   tsPreFixupHook = ''
     ${queriesHook}
-
-    ${smithyParserHook}
   '';
 
   tsPostPatchHook = ''
@@ -82,28 +66,22 @@ let
     ln -s ${treesitterGrammars} parser
   '';
 
-  buildPlug = name:
-    buildVimPluginFrom2Nix {
-      pname = name;
-      version = "master";
-      src = builtins.getAttr name inputs;
-      preFixup = ''
-        ${writeIf (name == "nvim-lspconfig") smithyLspHook}
-        ${writeIf (name == "nvim-treesitter") tsPreFixupHook}
-      '';
-      postPatch = ''
-        ${writeIf (name == "nvim-treesitter") tsPostPatchHook}
-      '';
-    };
-
-  vim-scala3 = prev.vimUtils.buildVimPlugin {
-    name = "vim-scala3";
-    src = inputs.vim-scala;
+  buildPlug = name: buildVimPlugin {
+    pname = name;
+    version = "master";
+    src = builtins.getAttr name inputs;
+    preFixup = ''
+      ${writeIf (name == "nvim-lspconfig") smithyLspHook}
+      ${writeIf (name == "nvim-treesitter") tsPreFixupHook}
+      ${writeIf (name == "telescope-media-files") telescopeFixupHook}
+    '';
+    postPatch = ''
+      ${writeIf (name == "nvim-treesitter") tsPostPatchHook}
+    '';
   };
 
   vimPlugins = {
     inherit (pkgs.vimPlugins) nerdcommenter;
-    inherit vim-scala3;
   };
 in
 {

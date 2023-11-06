@@ -5,13 +5,6 @@ with builtins;
 
 let
   cfg = config.vim.lsp;
-
-  # Smithy packages
-  cs = "${pkgs.coursier}/bin/cs";
-  sls = {
-    name = "com.disneystreaming.smithy:smithy-language-server";
-    version = "0.0.20";
-  };
 in
 {
   options.vim.lsp = {
@@ -22,9 +15,9 @@ in
     nix = {
       enable = mkEnableOption "Nix LSP";
       type = mkOption {
-        type = types.enum [ "nil" "rnix-lsp" ];
-        default = "rnix-lsp";
-        description = "Whether to use `nil` or `rnix-lsp`";
+        type = types.enum [ "nixd" "nil" "rnix-lsp" ];
+        default = "nil";
+        description = "Whether to use `nixd`, `nil` or `rnix-lsp`";
       };
     };
 
@@ -41,7 +34,32 @@ in
       };
     };
 
-    smithy = mkEnableOption "Smithy Language LSP";
+    smithy = {
+      enable = mkEnableOption "Smithy Language LSP";
+      launcher = mkOption {
+        type = types.package;
+        default = pkgs.coursier;
+        description = "The launcher of the LSP server";
+      };
+      server = {
+        name = mkOption {
+          type = types.str;
+          default = "com.disneystreaming.smithy:smithy-language-server";
+          description = "The Smithy LSP server dependency (usually a jar)";
+        };
+        version = mkOption {
+          type = types.str;
+          default = "0.0.28";
+          description = "The Smithy LSP server dependency version";
+        };
+        class = mkOption {
+          type = types.str;
+          default = "software.amazon.smithy.lsp.Main";
+          description = "The Smithy LSP server main class";
+        };
+      };
+    };
+
     sql = mkEnableOption "SQL Language LSP";
     ts = mkEnableOption "TS language LSP";
 
@@ -66,8 +84,8 @@ in
 
   config = mkIf cfg.enable {
     vim.startPlugins = with pkgs.neovimPlugins;
-      [ nvim-lspconfig null-ls ] ++
-      (withPlugins (config.vim.autocomplete.enable && (config.vim.autocomplete.type == "nvim-cmp")) [ cmp-nvim-lsp ]) ++
+      [ nvim-lspconfig ] ++
+      (withPlugins config.vim.autocomplete.enable [ cmp-nvim-lsp ]) ++
       (withPlugins cfg.sql [ sqls-nvim ]) ++
       (withPlugins cfg.scala.enable [ nvim-metals ]) ++
       (withPlugins cfg.folds [ promise-async nvim-ufo ]) ++
@@ -140,52 +158,6 @@ in
         ''}
       end
 
-      local null_ls = require("null-ls")
-      local null_helpers = require("null-ls.helpers")
-      local null_methods = require("null-ls.methods")
-
-      local ls_sources = {
-        ${writeIf cfg.python
-      ''
-          null_ls.builtins.formatting.black.with({
-            command = "${pkgs.black}/bin/black",
-          }),
-        ''}
-        -- Commented out for now
-        --${writeIf (config.vim.git.enable && config.vim.git.gitsigns.enable) ''
-        --  null_ls.builtins.code_actions.gitsigns,
-        --''}
-        ${writeIf cfg.sql
-      ''
-          null_helpers.make_builtin({
-            method = null_methods.internal.FORMATTING,
-            filetypes = { "sql" },
-            generator_opts = {
-              to_stdin = true,
-              ignore_stderr = true,
-              suppress_errors = true,
-              command = "${pkgs.sqlfluff}/bin/sqlfluff",
-              args = {
-                "fix",
-                "-",
-              },
-            },
-            factory = null_helpers.formatter_factory,
-          }),
-
-          null_ls.builtins.diagnostics.sqlfluff.with({
-            command = "${pkgs.sqlfluff}/bin/sqlfluff",
-            extra_args = {"--dialect", "postgres"}
-          }),
-        ''}
-
-        ${writeIf cfg.ts
-      ''
-          null_ls.builtins.diagnostics.eslint,
-          null_ls.builtins.formatting.prettier,
-        ''}
-      }
-
       vim.g.formatsave = ${
         if cfg.formatOnSave
         then "true"
@@ -210,15 +182,6 @@ in
         attach_keymaps(client, bufnr)
         format_callback(client, bufnr)
       end
-
-      -- Enable null-ls
-      require('null-ls').setup({
-        diagnostics_format = "[#{m}] #{s} (#{c})",
-        debounce = 250,
-        default_timeout = 5000,
-        sources = ls_sources,
-        on_attach=default_on_attach
-      })
 
       -- Enable lspconfig
       local lspconfig = require('lspconfig')
@@ -279,23 +242,10 @@ in
       ${let
         cfg = config.vim.autocomplete;
       in
-        writeIf cfg.enable
-        (
-          if cfg.type == "nvim-compe"
-          then ''
-            vim.capabilities.textDocument.completion.completionItem.snippetSupport = true
-            capabilities.textDocument.completion.completionItem.resolveSupport = {
-              properties = {
-                'documentation',
-                'detail',
-                'additionalTextEdits',
-              }
-            }
-          ''
-          else ''
-            capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-          ''
-        )}
+        writeIf cfg.enable ''
+          capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+        ''
+      };
 
       ${writeIf cfg.rust.enable ''
         -- Rust config
@@ -319,10 +269,6 @@ in
         }
 
         require('crates').setup {
-          null_ls = {
-            enabled = true,
-            name = "crates.nvim",
-          }
         }
         require('rust-tools').setup(rustopts)
       ''}
@@ -333,6 +279,17 @@ in
           capabilities = capabilities;
           on_attach=default_on_attach;
           cmd = {"${pkgs.nodePackages.pyright}/bin/pyright-langserver", "--stdio"}
+        }
+      ''}
+
+      ${writeIf (cfg.nix.enable && cfg.nix.type == "nixd") ''
+        -- Nix config
+        lspconfig.nixd.setup{
+          capabilities = capabilities;
+          on_attach = function(client, bufnr)
+            attach_keymaps(client, bufnr)
+          end,
+          cmd = {"${pkgs.nixd}/bin/nixd"}
         }
       ''}
 
@@ -468,15 +425,11 @@ in
         vim.cmd([[augroup end]])
       ''}
 
-      ${writeIf cfg.nix.enable
-    ''
+      ${writeIf cfg.nix.enable ''
         -- Nix formatter
-        null_ls.builtins.formatting.alejandra.with({
-          command = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
-        });
       ''}
 
-      ${writeIf cfg.smithy ''
+      ${writeIf cfg.smithy.enable ''
         -- Smithy config
         vim.cmd([[au BufRead,BufNewFile *.smithy setfiletype smithy]])
 
@@ -485,7 +438,13 @@ in
           on_attach = function(client, bufnr)
             attach_keymaps(client, bufnr)
           end,
-          cmd = { '${cs}', 'launch', '${sls.name}:${sls.version}', '--' , '0' },
+          cmd = {
+            '${cfg.smithy.launcher}/bin/cs', 'launch',
+            '${cfg.smithy.server.name}:${cfg.smithy.server.version}',
+            '--ttl', '1h',
+            '--main-class', '${cfg.smithy.server.class}',
+            '--', '0'
+          },
           root_dir = lspconfig.util.root_pattern("smithy-build.json")
         }
       ''}

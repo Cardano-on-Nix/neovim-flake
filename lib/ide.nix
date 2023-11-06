@@ -32,7 +32,7 @@ let
         };
         rust.enable = false;
         ts = false;
-        smithy = false;
+        smithy.enable = false;
         dhall = false;
         elm = false;
         haskell = false;
@@ -70,10 +70,7 @@ let
       };
       autopairs.enable = true;
       neoclip.enable = true;
-      autocomplete = {
-        enable = true;
-        type = "nvim-cmp";
-      };
+      autocomplete.enable = true;
       filetree.nvimTreeLua = {
         enable = true;
         hideDotFiles = false;
@@ -84,9 +81,6 @@ let
         enable = true;
         autotagHtml = true;
         context.enable = true;
-      };
-      scala = {
-        highlightMode = "treesitter";
       };
       keys = {
         enable = true;
@@ -104,6 +98,8 @@ let
       };
       telescope = {
         enable = true;
+        # NOTE: still quite buggy in some terminals
+        mediaFiles.enable = false;
       };
       markdown = {
         enable = true;
@@ -120,7 +116,17 @@ let
           statePath = "~/.local/share/mind.nvim/mind.json";
         };
       };
+      chatgpt = {
+        enable = false;
+        openaiApiKey = null;
+      };
+      spider = {
+        enable = false;
+        skipInsignificantPunctuation = true;
+      };
+      dial.enable = true;
       hop.enable = true;
+      notifications.enable = true;
       todo.enable = true;
     };
   };
@@ -128,8 +134,9 @@ let
   langs = {
     vim.lsp = {
       ts = true;
-      smithy = true;
-      dhall = true;
+      smithy.enable = true;
+      # FIXME: dhall is marked as broken on nixpkgs
+      dhall = false;
       elm = true;
     };
   };
@@ -176,6 +183,10 @@ let
 in
 {
   full = neovimBuilder {
+    config = deepMerge (deepMerge cfg langs) nightly;
+  };
+
+  full-nightly = neovimBuilder {
     config = deepMerge cfg langs;
   };
 

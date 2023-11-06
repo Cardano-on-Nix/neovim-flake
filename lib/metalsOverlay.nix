@@ -7,7 +7,7 @@ let
 in
 {
   metals = builder {
-    version = "0.11.10";
-    outputHash = "sha256-CNLBDsyiEOmMGA9r8eU+3z75VYps21kHnLpB1LYC7W4=";
+    version = "1.0.1";
+    outputHash = "sha256-AamUE6mr9fwjbDndQtzO2Yscu2T6zUW/DiXMYwv35YE=";
   };
 }

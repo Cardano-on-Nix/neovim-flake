@@ -6,8 +6,13 @@
     nixpkgs.url = github:nixos/nixpkgs/nixos-unstable;
     flake-utils.url = github:numtide/flake-utils;
 
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # nix lsp support
+    nixd.url = github:nix-community/nixd;
 
     # Nix module docs generator
     nmd.url = github:gvolpe/nmd;
@@ -18,16 +23,30 @@
       flake = false;
     };
 
-    tree-sitter-typescript = {
-      url = github:tree-sitter/tree-sitter-typescript;
+    # Neovim plugins
+
+    # AI plugins
+    nvim-chatgpt = {
+      #url = github:jackMort/ChatGPT.nvim;
+      #url = git+file:///home/gvolpe/workspace/ChatGPT.nvim;
+      url = github:gvolpe/ChatGPT.nvim;
       flake = false;
     };
 
-    # Neovim plugins
+    # Notifications
+    nvim-notify = {
+      url = github:rcarriga/nvim-notify;
+      flake = false;
+    };
 
     # Text objects
     nvim-surround = {
       url = github:kylechui/nvim-surround;
+      flake = false;
+    };
+
+    nvim-spider = {
+      url = github:chrisgrieser/nvim-spider;
       flake = false;
     };
 
@@ -46,6 +65,10 @@
       url = github:nvim-treesitter/nvim-treesitter;
       flake = false;
     };
+    nvim-treesitter-textobjects = {
+      url = github:nvim-treesitter/nvim-treesitter-textobjects;
+      flake = false;
+    };
     lspsaga = {
       url = github:tami5/lspsaga.nvim;
       flake = false;
@@ -59,7 +82,7 @@
       flake = false;
     };
     nvim-treesitter-context = {
-      url = github:lewis6991/nvim-treesitter-context;
+      url = github:nvim-treesitter/nvim-treesitter-context;
       flake = false;
     };
     nvim-lightbulb = {
@@ -109,6 +132,12 @@
       flake = false;
     };
 
+    telescope-media-files = {
+      #url = git+file:///home/gvolpe/workspace/telescope-media-files.nvim;
+      url = github:gvolpe/telescope-media-files.nvim;
+      flake = false;
+    };
+
     # Filetrees
     nvim-tree-lua = {
       url = github:kyazdani42/nvim-tree.lua;
@@ -128,10 +157,6 @@
     };
 
     # Autocompletes
-    nvim-compe = {
-      url = github:hrsh7th/nvim-compe;
-      flake = false;
-    };
     nvim-cmp = {
       url = github:hrsh7th/nvim-cmp;
       flake = false;
@@ -269,20 +294,31 @@
       flake = false;
     };
 
-    # Plenary (required by crates-nvim)
-    plenary-nvim = {
-      url = github:nvim-lua/plenary.nvim;
-      flake = false;
-    };
-
     # Plant UML syntax highlights
     vim-plantuml = {
       url = github:aklt/plantuml-syntax;
       flake = false;
     };
+
+    # Enhanced incr/decr functionality
+    dial-nvim = {
+      url = github:monaqa/dial.nvim;
+      flake = false;
+    };
+
+    # Dependencies of other plugins
+    plenary-nvim = {
+      url = github:nvim-lua/plenary.nvim;
+      flake = false;
+    };
+
+    nvim-nui = {
+      url = github:MunifTanjim/nui.nvim;
+      flake = false;
+    };
   };
 
-  outputs = inputs @ { self, nixpkgs, flake-utils, ... }:
+  outputs = inputs @ { nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         plugins =
@@ -295,9 +331,8 @@
               "flake-utils"
               "neovim-nightly-flake"
               "nmd"
-              "ts-build"
+              "nixd"
               "tree-sitter-scala"
-              "tree-sitter-typescript"
             ];
           in
           builtins.attrNames (f nonPluginInputNames inputs);
@@ -321,22 +356,20 @@
             version = inputs.tree-sitter-scala.rev;
             src = inputs.tree-sitter-scala;
           };
-
-          tree-sitter-tsx-master = p.tree-sitter.buildGrammar {
-            language = "tsx";
-            version = inputs.tree-sitter-typescript.rev;
-            src = inputs.tree-sitter-typescript;
-          };
         };
 
         neovimOverlay = f: p: {
           neovim-nightly = inputs.neovim-nightly-overlay.packages.${system}.neovim;
         };
 
+        nixdOverlay = f: p: {
+          inherit (inputs.nixd.packages.${system}) nixd;
+        };
+
         pkgs = import nixpkgs {
           inherit system;
           config = { allowUnfree = true; };
-          overlays = [ libOverlay pluginOverlay metalsOverlay neovimOverlay nmdOverlay tsOverlay ];
+          overlays = [ libOverlay pluginOverlay metalsOverlay neovimOverlay nmdOverlay nixdOverlay tsOverlay ];
         };
 
         default-ide = pkgs.callPackage ./lib/ide.nix {
@@ -388,6 +421,7 @@
 
           # Main languages enabled
           ide = default-ide.full.neovim;
+          nightly = default-ide.full-nightly.neovim;
 
           # Only Haskell (quite heavy)
           haskell = default-ide.haskell.neovim;
