@@ -13,12 +13,17 @@ in
     mediaFiles = {
       enable = mkEnableOption "enable telescope-media-files extension";
     };
+
+    tabs = {
+      enable = mkEnableOption "enable search.nvim (enhances telescope with tab-based search)";
+    };
   };
 
   config = mkIf cfg.enable {
     vim.startPlugins = with pkgs.neovimPlugins;
       [ telescope ] ++
-      (withPlugins cfg.mediaFiles.enable [ telescope-media-files ]);
+      (withPlugins cfg.mediaFiles.enable [ telescope-media-files ]) ++
+      (withPlugins cfg.tabs.enable [ telescope-tabs ]);
 
     vim.nnoremap =
       {
@@ -58,6 +63,21 @@ in
     vim.luaConfigRC = ''
       ${writeIf cfg.mediaFiles.enable ''
       require("telescope").load_extension("media_files")
+      ''}
+
+      ${writeIf cfg.tabs.enable ''
+      local builtin = require('telescope.builtin')
+      require("search").setup({
+        append_tabs = { -- append_tabs will add the provided tabs to the default ones
+          {
+            "Commits", -- or name = "Commits"
+            builtin.git_commits, -- or tele_func = require('telescope.builtin').git_commits
+            available = function() -- optional
+              return vim.fn.isdirectory(".git") == 1
+            end
+          }
+        },
+      })
       ''}
 
       require("telescope").setup {

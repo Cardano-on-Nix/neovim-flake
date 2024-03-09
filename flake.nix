@@ -138,9 +138,14 @@
       flake = false;
     };
 
+    telescope-tabs = {
+      url = github:FabianWirth/search.nvim;
+      flake = false;
+    };
+
     # Filetrees
     nvim-tree-lua = {
-      url = github:kyazdani42/nvim-tree.lua;
+      url = github:nvim-tree/nvim-tree.lua;
       flake = false;
     };
 
