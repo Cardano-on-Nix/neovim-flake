@@ -108,22 +108,22 @@ let
         enable = true;
         glow.enable = true;
       };
-      git = {
-        enable = true;
-        gitsigns.enable = true;
-        neogit.enable = true;
-      };
-      mind = {
-        enable = false;
-        persistence = {
-          dataDir = "~/.local/share/mind.nvim/data";
-          statePath = "~/.local/share/mind.nvim/mind.json";
-        };
-      };
-      chatgpt = {
-        enable = false;
-        openaiApiKey = null;
-      };
+      # git = {
+      #   enable = true;
+      #   gitsigns.enable = true;
+      #   neogit.enable = true;
+      # };
+      # mind = {
+      #   enable = false;
+      #   persistence = {
+      #     dataDir = "~/.local/share/mind.nvim/data";
+      #     statePath = "~/.local/share/mind.nvim/mind.json";
+      #   };
+      # };
+      # chatgpt = {
+      #   enable = false;
+      #   openaiApiKey = null;
+      # };
       spider = {
         enable = false;
         skipInsignificantPunctuation = true;

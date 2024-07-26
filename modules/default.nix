@@ -4,14 +4,14 @@
   imports = [
     ./autopairs
     ./basic
-    ./chatgpt
+    # ./chatgpt
     ./comments
     ./completion
     ./core
     ./dial
     ./filetree
     ./fx
-    ./git
+    # ./git
     ./harpoon
     ./hop
     ./hurl

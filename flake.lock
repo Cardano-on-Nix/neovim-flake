@@ -160,22 +160,6 @@
         "type": "github"
       }
     },
-    "diffview": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1700506468,
-        "narHash": "sha256-3EdnBUka9Rh5Brl6TWpN6GlD9z32mmY3Ip+wyiKob/8=",
-        "owner": "sindrets",
-        "repo": "diffview.nvim",
-        "rev": "3dc498c9777fe79156f3d32dddd483b8b3dbd95f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "sindrets",
-        "repo": "diffview.nvim",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -315,22 +299,6 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "gitsigns-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1715007445,
-        "narHash": "sha256-v21qTJfiv57vSUDGCJ4wM+L0Ixwh2b3pkoESFAHBrDM=",
-        "owner": "lewis6991",
-        "repo": "gitsigns.nvim",
-        "rev": "805610a9393fa231f2c2b49cb521bfa413fadb3d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lewis6991",
-        "repo": "gitsigns.nvim",
         "type": "github"
       }
     },
@@ -530,22 +498,6 @@
       "original": {
         "owner": "gvolpe",
         "repo": "mind.nvim",
-        "type": "github"
-      }
-    },
-    "neogit": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1715585974,
-        "narHash": "sha256-xncUButV2/FSOPNolbrZuPPSC1FOtgrlZBwzHHPKCTo=",
-        "owner": "NeogitOrg",
-        "repo": "neogit",
-        "rev": "bc0c609e3568a171e0549b449aa1b2b4b5b20e8c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NeogitOrg",
-        "repo": "neogit",
         "type": "github"
       }
     },
@@ -775,22 +727,6 @@
       "original": {
         "owner": "akinsho",
         "repo": "bufferline.nvim",
-        "type": "github"
-      }
-    },
-    "nvim-chatgpt": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1681191932,
-        "narHash": "sha256-aY9EMhx3QAF5hKyiEXKMNP0cDSrQiJYU9UWBO6K8J7I=",
-        "owner": "gvolpe",
-        "repo": "ChatGPT.nvim",
-        "rev": "4e68f755ffc9b8657525a912f6e4ebf5a8af7cc6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gvolpe",
-        "repo": "ChatGPT.nvim",
         "type": "github"
       }
     },
@@ -1142,10 +1078,8 @@
         "cmp-vsnip": "cmp-vsnip",
         "crates-nvim": "crates-nvim",
         "dial-nvim": "dial-nvim",
-        "diffview": "diffview",
         "flake-schemas": "flake-schemas",
         "flake-utils": "flake-utils",
-        "gitsigns-nvim": "gitsigns-nvim",
         "glow-nvim": "glow-nvim",
         "harpoon": "harpoon",
         "hop": "hop",
@@ -1157,7 +1091,6 @@
         "lspsaga": "lspsaga",
         "lualine": "lualine",
         "mind-nvim": "mind-nvim",
-        "neogit": "neogit",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nightfox": "nightfox",
         "nixd": "nixd",
@@ -1168,7 +1101,6 @@
         "null-ls": "null-ls",
         "nvim-autopairs": "nvim-autopairs",
         "nvim-bufferline": "nvim-bufferline",
-        "nvim-chatgpt": "nvim-chatgpt",
         "nvim-cmp": "nvim-cmp",
         "nvim-code-action-menu": "nvim-code-action-menu",
         "nvim-cursorline": "nvim-cursorline",
@@ -1201,7 +1133,6 @@
         "tree-sitter-scala": "tree-sitter-scala",
         "trouble": "trouble",
         "twilight": "twilight",
-        "vim-fugitive": "vim-fugitive",
         "vim-plantuml": "vim-plantuml",
         "vim-vsnip": "vim-vsnip",
         "which-key": "which-key",
@@ -1411,22 +1342,6 @@
       "original": {
         "owner": "folke",
         "repo": "twilight.nvim",
-        "type": "github"
-      }
-    },
-    "vim-fugitive": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1714601825,
-        "narHash": "sha256-0ujueJ226zEmjkFwodSukO1Zu5gMvTmx/dCtT5VBhek=",
-        "owner": "tpope",
-        "repo": "vim-fugitive",
-        "rev": "ce882460cf3db12e99f8bf579cbf99e331f6dd4f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tpope",
-        "repo": "vim-fugitive",
         "type": "github"
       }
     },

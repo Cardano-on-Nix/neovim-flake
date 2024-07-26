@@ -25,13 +25,13 @@
 
     # Neovim plugins
 
-    # AI plugins
-    nvim-chatgpt = {
-      #url = github:jackMort/ChatGPT.nvim;
-      #url = git+file:///home/gvolpe/workspace/ChatGPT.nvim;
-      url = github:gvolpe/ChatGPT.nvim;
-      flake = false;
-    };
+    # # AI plugins
+    # nvim-chatgpt = {
+    #   #url = github:jackMort/ChatGPT.nvim;
+    #   #url = git+file:///home/gvolpe/workspace/ChatGPT.nvim;
+    #   url = github:gvolpe/ChatGPT.nvim;
+    #   flake = false;
+    # };
 
     # Notifications
     nvim-notify = {
@@ -298,25 +298,25 @@
     };
 
     # Git
-    vim-fugitive = {
-      url = github:tpope/vim-fugitive;
-      flake = false;
-    };
+    # vim-fugitive = {
+    #   url = github:tpope/vim-fugitive;
+    #   flake = false;
+    # };
 
-    gitsigns-nvim = {
-      url = github:lewis6991/gitsigns.nvim;
-      flake = false;
-    };
+    # gitsigns-nvim = {
+    #   url = github:lewis6991/gitsigns.nvim;
+    #   flake = false;
+    # };
 
-    diffview = {
-      url = github:sindrets/diffview.nvim;
-      flake = false;
-    };
+    # diffview = {
+    #   url = github:sindrets/diffview.nvim;
+    #   flake = false;
+    # };
 
-    neogit = {
-      url = github:NeogitOrg/neogit;
-      flake = false;
-    };
+    # neogit = {
+    #   url = github:NeogitOrg/neogit;
+    #   flake = false;
+    # };
 
     # Fx
     cellular-automaton = {
