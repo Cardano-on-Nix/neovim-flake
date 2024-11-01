@@ -63,6 +63,11 @@
       flake = false;
     };
 
+    tide = {
+      url = github:jackMort/tide.nvim;
+      flake = false;
+    };
+
     # Distraction-free coding
     twilight = {
       url = github:folke/twilight.nvim;
@@ -163,7 +168,8 @@
 
     # Filetrees
     nvim-tree-lua = {
-      url = github:nvim-tree/nvim-tree.lua;
+      #url = github:nvim-tree/nvim-tree.lua;
+      url = github:ghostbuster91/nvim-tree.lua/expand_until;
       flake = false;
     };
 
@@ -333,6 +339,11 @@
     # Markdown
     glow-nvim = {
       url = github:ellisonleao/glow.nvim;
+      flake = false;
+    };
+
+    render-markdown-nvim = {
+      url = github:MeanderingProgrammer/render-markdown.nvim;
       flake = false;
     };
 

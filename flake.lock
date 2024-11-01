@@ -909,15 +909,16 @@
     "nvim-tree-lua": {
       "flake": false,
       "locked": {
-        "lastModified": 1715591647,
-        "narHash": "sha256-eGi/yU5ve5193lMIMA2RlxFtGjv2cjZybuuSXY6YZcs=",
-        "owner": "nvim-tree",
+        "lastModified": 1725356311,
+        "narHash": "sha256-w8WJfKjrva83b8Yixaljca8WbvTit22gSri/5SiMaIQ=",
+        "owner": "ghostbuster91",
         "repo": "nvim-tree.lua",
-        "rev": "edd4e25fd4f8923f9e2816e27b5d1b1b5fff7a85",
+        "rev": "b506e05cd7394c6f4711df03067befd008d579bf",
         "type": "github"
       },
       "original": {
-        "owner": "nvim-tree",
+        "owner": "ghostbuster91",
+        "ref": "expand_until",
         "repo": "nvim-tree.lua",
         "type": "github"
       }
@@ -1066,6 +1067,22 @@
         "type": "github"
       }
     },
+    "render-markdown-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1726511696,
+        "narHash": "sha256-l0k39OXcpoH7D6UmuQy0LNLj+8HCkKz9R/4zVH4bEt0=",
+        "owner": "MeanderingProgrammer",
+        "repo": "render-markdown.nvim",
+        "rev": "2424693c7a4c79641a7ea1e2a838dbc9238d6066",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MeanderingProgrammer",
+        "repo": "render-markdown.nvim",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "bufdelete-nvim": "bufdelete-nvim",
@@ -1122,12 +1139,14 @@
         "onedark": "onedark",
         "plenary-nvim": "plenary-nvim",
         "promise-async": "promise-async",
+        "render-markdown-nvim": "render-markdown-nvim",
         "rosepine": "rosepine",
         "rust-tools": "rust-tools",
         "sqls-nvim": "sqls-nvim",
         "telescope": "telescope",
         "telescope-media-files": "telescope-media-files",
         "telescope-tabs": "telescope-tabs",
+        "tide": "tide",
         "todo-comments": "todo-comments",
         "tokyonight": "tokyonight",
         "tree-sitter-scala": "tree-sitter-scala",
@@ -1262,6 +1281,22 @@
       "original": {
         "owner": "FabianWirth",
         "repo": "search.nvim",
+        "type": "github"
+      }
+    },
+    "tide": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1728827703,
+        "narHash": "sha256-LbToO81yRROSbwjNTtY8hzQvO4qgAtv5iiUyjowvxhU=",
+        "owner": "jackMort",
+        "repo": "tide.nvim",
+        "rev": "0b6ccbcc026158e66c7d67f1f289812bbb3b48cf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jackMort",
+        "repo": "tide.nvim",
         "type": "github"
       }
     },

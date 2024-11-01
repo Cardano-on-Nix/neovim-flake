@@ -107,6 +107,7 @@ let
       markdown = {
         enable = true;
         glow.enable = true;
+        render.enable = true;
       };
       # git = {
       #   enable = true;
@@ -132,6 +133,7 @@ let
       harpoon.enable = true;
       hop.enable = true;
       notifications.enable = true;
+      tide.enable = true;
       todo.enable = true;
       zen.enable = true;
     };
